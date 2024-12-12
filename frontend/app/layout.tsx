@@ -7,6 +7,7 @@ import "./globals.css";
 import Footer from "@/components/templates/Footer/Footer";
 import Header from "@/components/templates/Headers/Header";
 import { UserProvider } from "@/context/UserContext";
+import { ProductProvider } from "@/context/ProductContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,9 +37,11 @@ export default function RootLayout({
       >
         <AntProvider>
           <UserProvider>
-          <Header />
-          {children}
-          <Footer />
+            <ProductProvider>
+              <Header />
+              {children}
+              <Footer />
+            </ProductProvider>
           </UserProvider>
         </AntProvider>
       </body>
