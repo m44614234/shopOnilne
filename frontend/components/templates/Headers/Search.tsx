@@ -1,82 +1,27 @@
 "use client";
-import {
-  CloseOutlined,
-  DeleteFilled,
-  SearchOutlined,
-} from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 import Link from "next/link";
 import { FormEvent, useMemo, useState } from "react";
-import useSWR from "swr";
 import Fuse from "fuse.js";
-import { useSelector } from "react-redux";
-import { baseUrl } from "@/utils/baseUrl";
 import { useProduct } from "@/context/ProductContext";
 
 const Search = () => {
-  //   const searchParams = useSearchParams();
-  //   const pathName = usePathname();
-  //   const router = useRouter();
-  //   const [searchValue, setSearchValue] = useState(searchParams.get("search") || "");
-
-  //   // Update search value state on input change
-  //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setSearchValue(e.target.value);
-  //   };
-
-  //   // Debounce function to delay the search query update
-  //   useEffect(() => {
-  //     const handler = setTimeout(() => {
-  //       const params = new URLSearchParams(searchParams.toString());
-  //       if (searchValue) {
-  //         params.set("search", searchValue);
-  //       } else {
-  //         params.delete("search");
-  //       }
-  //       router.push(`${pathName}?${params.toString()}`);
-  //     }, 300); // Adjust the debounce delay as needed
-
-  //     return () => {
-  //       clearTimeout(handler);
-  //     };
-  //   }, [searchValue, pathName, router, searchParams]);
-
-  //   // Handle search on Enter key press
-  //   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //     if (e.key === "Enter") {
-  //       const params = new URLSearchParams(searchParams.toString());
-  //       if (searchValue) {
-  //         params.set("search", searchValue);
-  //       } else {
-  //         params.delete("search");
-  //       }
-  //       router.push(`${pathName}?${params.toString()}`);
-  //     }
-  //   };
-  
-
-
   const [query, setQuery] = useState("");
- 
-  const {products} = useProduct()
-  console.log("products =>", products);
-  // use SWR
-  const fetcher = (...args: [string]) =>
-    fetch(...args).then((res) => res.json());
 
-  const { error, data } = useSWR(`${baseUrl}/product`, fetcher);
+  const { products } = useProduct();
 
   const handleSearch = (event: FormEvent<HTMLElement>) => {
     setQuery((event.target as HTMLInputElement).value);
   };
 
   const fuse = useMemo(() => {
-    if (!data) return null;
-    return new Fuse(data, {
+    if (!products) return null;
+    return new Fuse(products, {
       includeScore: true,
       keys: ["title"],
     });
-  }, [data]);
+  }, [products]);
 
   const searchResults = useMemo(() => {
     if (!fuse || !query) return [];

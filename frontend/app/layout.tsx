@@ -1,5 +1,4 @@
 "use client";
-import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Providers as AntProvider } from "./provider";
 
