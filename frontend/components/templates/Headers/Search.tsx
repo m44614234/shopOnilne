@@ -11,6 +11,7 @@ import useSWR from "swr";
 import Fuse from "fuse.js";
 import { useSelector } from "react-redux";
 import { baseUrl } from "@/utils/baseUrl";
+import { useProduct } from "@/context/ProductContext";
 
 const Search = () => {
   //   const searchParams = useSearchParams();
@@ -56,16 +57,8 @@ const Search = () => {
 
 
   const [query, setQuery] = useState("");
-  const products = [
-    {
-      id: 1,
-      title: "Product 1",
-    },
-    {
-      id: 2,
-      title: "Product 2",
-    },
-  ]
+ 
+  const {products} = useProduct()
   console.log("products =>", products);
   // use SWR
   const fetcher = (...args: [string]) =>

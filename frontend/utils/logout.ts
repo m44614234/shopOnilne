@@ -3,7 +3,7 @@ import { baseUrl } from "./baseUrl";
 export const logout = async () => {
 
     try {
-      const response = await fetch(`${baseUrl}/user/logout`, {
+      const response = await fetch(`${baseUrl}/auth/logout`, {
         method: 'POST',
         credentials: 'include', // این گزینه برای ارسال کوکی‌ها ضروری است
       });

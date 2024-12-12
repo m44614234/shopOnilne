@@ -3,7 +3,7 @@ import axios from "axios";
 import { baseUrl } from "@/utils/baseUrl";
 
 interface ProductContextType {
-  product: any;
+  products: any;
   loading: boolean;
   error: any;
 }
@@ -14,14 +14,14 @@ export const ProductProvider: React.FC<{
   children: React.ReactNode;
 
 }> = ({ children }) => {
-  const [product, setUser] = useState<any>(null);
+  const [products, setProducts] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
 
   const getAllProducts = async () => {
     try {
       const response = await axios.get(`${baseUrl}/product`);
-      setUser(response.data);
+      setProducts(response.data);
     } catch (error) {
       console.error("Failed to fetch products:", error);
       setError(error);
@@ -35,7 +35,7 @@ export const ProductProvider: React.FC<{
   }, []);
 
   return (
-    <ProductContext.Provider value={{ product, loading, error }}>
+    <ProductContext.Provider value={{ products, loading, error }}>
       {children}
     </ProductContext.Provider>
   );
