@@ -1,9 +1,9 @@
-import { base_url } from "./baseURL";
+import { baseUrl } from "./baseUrl";
 
 export const logout = async () => {
 
     try {
-      const response = await fetch(`${base_url}/user/logout`, {
+      const response = await fetch(`${baseUrl}/user/logout`, {
         method: 'POST',
         credentials: 'include', // این گزینه برای ارسال کوکی‌ها ضروری است
       });

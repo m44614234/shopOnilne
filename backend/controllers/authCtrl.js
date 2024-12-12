@@ -4,6 +4,7 @@ import { generateToken } from "../utils/generateToken.js";
 import { sendEmail } from "../utils/mailtrap.js";
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
+import mongoose from "mongoose";
 
 
 export const Register = async (req, res) => {
@@ -158,29 +159,30 @@ export const LoginAdmin = async (req, res) => {
   }
 };
 
+
 export const getUser = async (req, res) => {
-  console.log("user =>", req.user);
+  const id = req.user._id;
+  
+  const userId = id.toString()
+  console.log("userId =>", userId);
+
+  // console.log("req.params.id =>", req.params.id);
+  // console.log("req.params._id =>", req.params._id);
+
+  // Validate ObjectId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid user ID format' });
+  }
 
   try {
-    const user = req.params.id
-      ? await UserModel.findById(req.params.id)
-      : await UserModel.findById(req.user._id);
-
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "کاربری یافت نشد",
-      });
-    } else {
-      return res.status(200).json({
-        success: true,
-        message: "کاربر با موفقیت یافت شد",
-        data: user,
-      });
-    }
+      const user = await UserModel.findById(userId);
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
   } catch (error) {
-    console.log("error =>", error);
+      console.error("error get user =>", error);
+      res.status(500).json({ message: 'Server error' });
   }
 };
 

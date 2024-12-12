@@ -12,18 +12,12 @@ import {
   ShoppingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-// import { authService } from "@/RTK/user/userService";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import Link from "next/link";
 import useSWR from "swr";
 import { useUser } from "@/context/UserContext";
-// import { logout } from "@/utils/logout";
-
-import axios from "axios";
-import Cookies from "js-cookie";
-import { baseUrl } from "@/utils/baseUrl";
+import { logout } from "@/utils/logout";
 
 let profileSchema = yup.object({
   firstname: yup.string().required("نام ضروری است"),
@@ -32,51 +26,17 @@ let profileSchema = yup.object({
   email: yup.string().required("ایمیل ضروری است").email("ایمیل نامعتبر است"),
 });
 
-const Profile = ({ params }: { params: any }) => {
+const Profile = () => {
   const [currentComponent, setCurrentComponent] = useState("orders");
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
 
-  const { id } = params;
-  console.log("id =>", id);
 
   const router = useRouter();
 
-  // const { user } : any = useUser();
-  // console.log("user in profile =>", user);
-
-  const [user, setUser] = useState(null);
-
-  const getUser = async () => {
-    try {
-      const token = Cookies.get("jwt");
-      const tokenMatch = token?.match(/jwt=([^;]+)/);
-      console.log("tokenMatch =>", tokenMatch);
-
-      if (token) {
-        const response: any = await axios.get(`${baseUrl}/auth/${id}`,{
-          headers: {
-            Authorization: `Bearer ${tokenMatch ? tokenMatch[1] : null}`,
-          },
-        });
-        setUser(response.data);
-        console.log("response.data =>", response.data);
-        console.log("response =>", response);
-      }
-    } catch (error) {
-      console.error("Failed to fetch user profile:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
-  console.log("user in profile =>", user);
-
+  const {user} = useUser();
+  console.log("user from context =>", user);
   // items
 
   const renderComponent = () => {
@@ -99,11 +59,11 @@ const Profile = ({ params }: { params: any }) => {
     setError(null);
 
     try {
-      // const result = await logout();
-      // if (result) {
-      //   toast.success("خروج از حساب کاربری با موفقیت انجام شد");
-      //   router.replace("/login");
-      // }
+      const result = await logout();
+      if (result) {
+        toast.success("خروج از حساب کاربری با موفقیت انجام شد");
+        router.replace("/login");
+      }
     } catch (err) {
       setError("خطا در اتصال به سرور");
     } finally {
@@ -198,16 +158,7 @@ const OrdersComponent = () => {
   const [userData, setUserData] = useState<any>(null);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const getProfileFunc = async () => {
-  //     const profile: any = await authService.getProfile();
-  //     setUserData(profile?.user);
-  //     if (!profile?.user) {
-  //       router.replace("/login");
-  //     }
-  //   };
-  //   getProfileFunc();
-  // }, []);
+ 
 
   const fetcher = (...args: [string]) =>
     fetch(...args).then((res) => res.json());
