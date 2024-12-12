@@ -1,0 +1,33 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/fuse": "^2.5.2",
+    "@types/js-cookie": "^3.0.6",
+    "antd": "^5.22.4",
+    "axios": "^1.7.9",
+    "fuse": "^0.12.1",
+    "fuse.js": "^7.0.0",
+    "js-cookie": "^3.0.5",
+    "next": "14.2.19",
+    "react": "^18",
+    "react-dom": "^18",
+    "swr": "^2.2.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
