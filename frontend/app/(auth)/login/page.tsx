@@ -34,7 +34,7 @@ const Login = () => {
         const token = response.data.token; // فرض بر این است که توکن در داده‌های پاسخ قرار دارد
         Cookies.set("jwt", token, { expires: 7 }); // توکن برای 7 روز معتبر است
         alert("ورود با موفقیت انجام شد");
-        router.push("/");
+        router.replace("/");
         setUser({ email: "", password: "" }); // پاک کردن مقادیر ورودی
       }
     } catch (error: any) {
