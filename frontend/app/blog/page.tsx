@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import Meta from "@/components/templates/Meta";
 import BreadCrumb from "@/components/templates/BreadCrumb";
@@ -11,13 +11,11 @@ const Blog = () => {
   const [blogCategory, setBlogCategory] = useState<any>([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const {blog : blogs} = useBlog()
+  const { blog: blogs } = useBlog();
 
   useEffect(() => {
     getBlogsCategory();
   }, []);
-
-  
 
   const getBlogsCategory = async () => {
     const res = await fetch(`${baseUrl}/blogcategory`, {
@@ -27,7 +25,7 @@ const Blog = () => {
     setBlogCategory(data);
   };
 
-  const handleCategoryChange = (category : any) => {
+  const handleCategoryChange = (category: any) => {
     setSelectedCategory(category);
   };
 
@@ -41,7 +39,11 @@ const Blog = () => {
             <p className="text-lg font-VazirBold">فیلتر بر اساس </p>
             <hr className="my-2 bg-gray-700 w-[95%] mx-auto" />
             <ul>
-              <li key="all" className="text-md cursor-pointer font-VazirMedium" onClick={() => handleCategoryChange(null)}>
+              <li
+                key="all"
+                className="text-md cursor-pointer font-VazirMedium"
+                onClick={() => handleCategoryChange(null)}
+              >
                 همه مقالات
               </li>
               {blogCategory &&

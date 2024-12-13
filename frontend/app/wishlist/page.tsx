@@ -11,11 +11,9 @@ import ReactStars from "react-stars";
 
 const Wishlist = () => {
   const { wish, RemoveFromWish } = useProduct();
-  const {user : userData  , AddtoCart, isInCart } = useUser()
+  const { user: userData, AddtoCart, isInCart } = useUser();
 
-  const router = useRouter();
-  
-
+  // const router = useRouter();
   // setTimeout(() => {
   //   if (userData === null) {
   //     router.replace("/login");

@@ -10,15 +10,15 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay } from "swiper/modules";
 import ReactStars from "react-stars";
-import { toast } from "react-toastify";
 import { useBlog } from "@/context/BlogContext";
 import { useUser } from "@/context/UserContext";
 import { baseUrl } from "@/utils/baseUrl";
+import { toast } from "react-toastify";
 
 const SingleBlog = ({ params }: any) => {
   const [blogData, setBlogData]: any = useState(null);
   const [star, setStar] = useState<any>();
-  const [comment, setComment] = useState<string | null>(null);
+  const [comment, setComment] = useState<string | null>("");
   const [comments, setComments] = useState<[] | null>([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,10 +31,9 @@ const SingleBlog = ({ params }: any) => {
     const fetchBlog = async () => {
       setIsLoading(true);
       try {
-        const data = getABlog(id); 
-        console.log('data =>', data);
+        const res = getABlog(id);
+        const data = await res;
         setBlogData(data);
-
       } catch (error: string | any) {
         setError(error);
       } finally {
@@ -45,49 +44,44 @@ const SingleBlog = ({ params }: any) => {
     fetchBlog();
   }, []);
 
- 
-
   // comments
   const createBlogComment = async () => {
     if (!userData) {
       toast.error("لطفا ابتدا وارد شوید");
     }
-    try {
-      // بررسی وجود امتیاز و کامنت
-      if (star === null || comment === null) {
-        toast.warning("لطفاً امتیاز و کامنت را وارد کنید");
-      }
 
-      const res = await fetch(`${baseUrl}/blogComment/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // مشخص کردن نوع محتوا
-          // اگر نیاز به توکن احراز هویت دارید، می‌توانید آن را در هدر اضافه کنید
-          // "Authorization": Bearer ${token},
-        },
-        body: JSON.stringify({
-          rating: star, // امتیاز
-          body: comment, // متن کامنت
-          blog: blogData?._id,
-          user: userData?._id,
-        }),
-      });
-
-      if (res.ok) {
-        toast.success("نظر شما با موفقیت ثبت شد");
-        setComment(null);
-        setStar(null);
-      }
-
-      if (!res.ok) {
-        throw new Error("خطا در ایجاد کامنت");
-      }
-
-      const data = await res.json();
-      console.log("کامنت با موفقیت ایجاد شد:", data);
-    } catch (error) {
-      console.error("خطا:", error);
+    // بررسی وجود امتیاز و کامنت
+    if (star === null || comment === null) {
+      toast.warning("لطفاً امتیاز و کامنت را وارد کنید");
     }
+
+    const res = await fetch(`${baseUrl}/blogComment/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        rating: star, // امتیاز
+        body: comment, // متن کامنت
+        blog: blogData?._id,
+        user: userData?._id,
+      }),
+    });
+
+    if (res.status === 201 || res.status === 200) {
+      toast.success("نظر شما با موفقیت ثبت شد");
+      setComment("");
+      setStar(null);
+    }
+
+    if (res.status === 422 || res.status === 400 || res.status === 404) {
+      toast.error("لطفا امتیاز خود را وارد کنید");
+    }
+
+    if (res.status === 500) {
+      toast.error("خطا در ایجاد کامنت");
+    }
+    
   };
 
   const getBlogs = async () => {
@@ -98,7 +92,7 @@ const SingleBlog = ({ params }: any) => {
       const data = await res.json();
       setComments(data);
     } catch (error) {
-      console.log("error");
+      toast.error("خطا در دریافت کامنت‌ها");
     }
   };
 
@@ -238,7 +232,7 @@ const SingleBlog = ({ params }: any) => {
                     id="review"
                   >
                     <CommentOutlined />
-                    <span dir="rtl">می توانید نظر خود را ثبت کنید.</span>
+                    <span dir="rtl"> می توانید نظر خود را ثبت کنید.</span>
                   </div>
                   <div dir="ltr" className=" w-full flex justify-end">
                     <ReactStars
@@ -248,7 +242,7 @@ const SingleBlog = ({ params }: any) => {
                       edit={true}
                       color2="#ffd700"
                       color1="gray"
-                      className="flex justify-end  w-full"
+                      className="flex justify-end w-full"
                       onChange={(e) => {
                         setStar(e);
                       }}
@@ -268,7 +262,6 @@ const SingleBlog = ({ params }: any) => {
                   </div>
                   <div className="flex content-end mb-4">
                     <button
-                      //   onClick={addRatingToProduct}
                       onClick={createBlogComment}
                       className="bg-slate-950 text-white px-4 py-2 rounded-md"
                       type="button"

@@ -1,8 +1,8 @@
 "use client";
 import localFont from "next/font/local";
 import { Providers as AntProvider } from "./provider";
-
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import Footer from "@/components/templates/Footer/Footer";
 import Header from "@/components/templates/Headers/Header";
 import { UserProvider } from "@/context/UserContext";

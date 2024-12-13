@@ -13,8 +13,9 @@ import ReactStars from "react-stars";
 const Compare = () => {
   const { compare, RemoveFromCompare } = useProduct();
   const { user: userData, AddtoCart, isInCart }: any = useUser();
-  const router = useRouter();
-
+  
+  console.log("compare =>", compare);
+  // const router = useRouter();
   // setTimeout(() => {
   //   if (userData === null) {
   //     router.push("/login");

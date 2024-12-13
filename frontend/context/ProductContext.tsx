@@ -53,13 +53,23 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
     typeof window !== "undefined" ? window.localStorage : null;
 
   //  Start Wishlist Block //
+  const isInWishlist = (productId: any) => {
+    return wish.some((item: any) => item._id === productId);
+  };
+  
+
+  useEffect(() => {
+      const cartItem = localStorage?.getItem("wish");
+      if (cartItem) {
+        setWish(JSON.parse(cartItem));
+      }
+    }, []);
+
   const updateLocalStorage = (items: any) => {
     localStorage?.setItem("wish", JSON.stringify(items));
   };
 
-  const isInWishlist = (productId: any) => {
-    return wish.some((item: any) => item._id === productId);
-  };
+ 
 
   const AddtoWish = (item: any) => {
     if (!userData) {
@@ -139,6 +149,9 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   // End Compare Block //
+ 
+
+  
 
   return (
     <ProductContext.Provider
